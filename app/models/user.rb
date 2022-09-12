@@ -10,4 +10,6 @@ class User < ActiveRecord::Base
 
   has_one :service
   has_one :appointment
+  validates :contact_number, presence: true, null: false
+
 end
