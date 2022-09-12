@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   post '/services', to: 'services#create'
   get '/appointments', to: 'appointments#index'
   post '/appointments/:servce_id', to: 'appointments#create'
+  get '/service_providers', to: 'service_providers#index'
 end
