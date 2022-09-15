@@ -10,6 +10,5 @@ class User < ActiveRecord::Base
 
   has_one :service
   has_one :appointment
-  validates :contact_number, presence: true, null: false
-
+  validates :contact_number, presence: true, null: false, uniqueness: true, format: {with: /\A[1-9][0-9]{9}\z/}
 end
