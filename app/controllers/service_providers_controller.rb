@@ -7,7 +7,7 @@ class ServiceProvidersController < ApplicationController
       service_provider_appointments = Appointment.where(service_id: s.id)
       render json: {
         my_appointments: service_provider_appointments
-      }, status: 200
+      }, status:200
     end
   end
 
@@ -18,7 +18,7 @@ class ServiceProvidersController < ApplicationController
       render json: {message: "No appointment found!"}, status: 400
     else
       appointment.update!(service_provider_params)
-      render json: appointment, status: 200
+      render json: appointment.status, status: 200
     end
   end
 

@@ -11,7 +11,7 @@ class AppointmentsController < ApplicationController
 		user = get_current_user
 		appointment = Appointment.new(
 			{
-				service_id: params[:servce_id],
+				service_id: params[:id],
 				user_id: user.id,
 				date: appointment_params[:date]
 			}
@@ -24,8 +24,8 @@ class AppointmentsController < ApplicationController
 		end
   end
 
-		private
-		def appointment_params
-			params.permit(:date)
-		end
+	private
+	def appointment_params
+		params.permit(:date)
+	end
 end
