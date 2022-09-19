@@ -2,7 +2,8 @@ class ServicesController < ApplicationController
 	before_action :authenticate_user! 
 
 	def index
-		@services = Service.all
+		user = get_current_user
+		@services = Service.where('user_id != ?', user.id)
 		render json: @services, status: 200
 	end
 	
