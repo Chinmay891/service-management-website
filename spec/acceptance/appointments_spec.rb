@@ -5,7 +5,7 @@ resource "Appointments" do
   let!(:service_provider) {User.create!(email: "c@gmail.com",contact_number:1234567890, password: 123456, password_confirmation: 123456)}
   let!(:user) {User.create!(email: "m@gmail.com",contact_number:1234567891, password: 123456, password_confirmation: 123456)}
   let!(:service){Service.create(name: "x",area: "y",charge: 123,user_id: service_provider.id)}
-  let!(:appointment){Appointment.create(service_id: service.id, user_id: user.id, date: Time.now)}
+  let!(:appointment){Appointment.create(service_id: service.id, user_id: user.id, date: DateTime.now + 100)}
   get '/appointments' do
     before do
       auth_headers = service_provider.create_new_auth_token
@@ -33,7 +33,7 @@ resource "Appointments" do
     context "200" do
       example "Schedule appointment for user" do
         request = {
-          date: "2022-09-08 05:13:20"
+          date: appointment.date
         }
         do_request(request)
         expect(response_status).to eq(200)
@@ -43,12 +43,10 @@ resource "Appointments" do
     context "400" do
       example "Unspecified date by user" do
         request = {
-          date: ""
         }
         do_request(request)
         expect(response_status).to eq(400)
       end
     end
-
   end
 end
