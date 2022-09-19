@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get '/services', to: 'services#index'
   post '/services', to: 'services#create'
   get '/appointments', to: 'appointments#index'
-  post '/appointments/:id', to: 'appointments#create'
+  post '/appointments', to: 'appointments#create'
   get '/service_providers', to: 'service_providers#index'
   patch '/service_providers/:id', to: 'service_providers#update'
 end
