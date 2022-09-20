@@ -21,7 +21,7 @@ resource "Appointments" do
     end
   end
 
-  post '/appointments/:id' do
+  post '/appointments' do
     parameter :date, "Date of appointment", required: true
     before do
       auth_headers = user.create_new_auth_token
@@ -29,11 +29,13 @@ resource "Appointments" do
       header "client", auth_headers["client"]
       header "uid", auth_headers["uid"]
     end
-    let(:id) {service.id}
+    # let(:id) {service.id}
     context "200" do
       example "Schedule appointment for user" do
         request = {
-          date: appointment.date
+          service_id: appointment.service_id,
+          user_id: user.id,
+          date: appointment.date.strftime('%Y-%m-%d %H:%M:%S')
         }
         do_request(request)
         expect(response_status).to eq(200)
