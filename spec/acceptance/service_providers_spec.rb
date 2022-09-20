@@ -23,22 +23,66 @@ resource "ServiceProviders" do
   end
 
   patch '/service_providers/:id'do
-    before do
-      auth_headers = service_provider.create_new_auth_token
-      # p auth_headers
-      header "access-token", auth_headers["access-token"]
-      header "client", auth_headers["client"]
-      header "uid", auth_headers["uid"]
-    end
-    let!(:id) {appointment.id}
     context "200" do
-      example "Update appointment status" do
+      let(:id) {appointment.id}
+      before do
+        auth_headers = service_provider.create_new_auth_token
+        # p auth_headers
+        header "access-token", auth_headers["access-token"]
+        header "client", auth_headers["client"]
+        header "uid", auth_headers["uid"]
+      end
+      example "Accept appointment" do
         request = {
           status: true
         }
         do_request(request)
         expect(status).to eq(200)
         expect(response_body).to eq("true")
+      end
+      example "Reject appointment" do
+        request = {
+          status: false
+        }
+        do_request(request)
+        expect(status).to eq(200)
+        expect(response_body).to eq("false")
+      end
+    end
+
+    context "401" do
+      let(:id) {appointment.id}
+      before do
+        auth_headers = user.create_new_auth_token
+        header "access-token", auth_headers["access-token"]
+        header "client", auth_headers["client"]
+        header "uid", auth_headers["uid"]
+      end
+      example "Unauthenticated user request" do
+        request = {
+          status: true
+        }
+        do_request(request)
+        expect(status).to eq(401)
+        expect(response_body).to eq('{"message":"User not authenticated!"}')
+      end
+    end
+    context "404" do
+      let!(:id) {0}
+      before do
+        auth_headers = service_provider.create_new_auth_token
+        # p auth_headers
+        header "access-token", auth_headers["access-token"]
+        header "client", auth_headers["client"]
+        header "uid", auth_headers["uid"]
+      end
+      example "Non existing appointment" do
+        request = {
+          status: true
+        }
+        do_request(request)
+        expect(status).to eq(404)
+        expect(response_body).to eq('{"message":"No such appointment!"}')
       end
     end
   end

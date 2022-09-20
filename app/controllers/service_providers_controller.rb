@@ -25,7 +25,7 @@ class ServiceProvidersController < ApplicationController
       render json: {message: "No such appointment!"},status: 404
     else
       if(Service.find(appointment.service_id).user_id != user.id)
-        render json: {message: "User not authenticated!"}, status: 400
+        render json: {message: "User not authenticated!"}, status: 401
       else
         appointment.update!(service_provider_params)
         render json: appointment.status, status: 200
